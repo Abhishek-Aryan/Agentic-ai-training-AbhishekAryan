@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configure - Random Forest Tool</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: rgba(255,255,255,0.9);
+            padding: 1rem;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c5aa0;
+            text-align: center;
+        }
+        .data-preview {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background: #2c5aa0;
+            color: white;
+        }
+        .config-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #2c5aa0;
+        }
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .btn {
+            background: #28a745;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            grid-column: 1 / -1;
+            justify-self: center;
+        }
+        .btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>📊 Random Forest Analyzer</h2>
+        <a href="/">Home</a> | <a href="/upload">Upload</a> | <strong>Configure</strong>
+    </div>
+    
+    <div class="container">
+        <h1>⚙️ Configure Analysis</h1>
+        <p style="text-align: center;">File: <strong>{{ filename }}</strong> | Shape: {{ shape[0] }} rows × {{ shape[1] }} columns</p>
+        
+        <div class="data-preview">
+            <h3>📋 Data Preview (First 10 rows)</h3>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            {% for column in columns %}
+                            <th>{{ column }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in preview %}
+                        <tr>
+                            {% for column in columns %}
+                            <td>{{ row[column] }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <form action="/configure" method="post" class="config-form">
+            <div>
+                <h3>🎯 Target Selection</h3>
+                <div class="form-group">
+                    <label for="target_column">Target Column:</label>
+                    <select name="target_column" id="target_column" required>
+                        <option value="">Select target column...</option>
+                        {% for column in columns %}
+                        <option value="{{ column }}">{{ column }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <h3>🔧 Model Parameters</h3>
+                <div class="form-group">
+                    <label for="n_estimators">Number of Trees:</label>
+                    <input type="number" name="n_estimators" value="100" min="1" max="1000" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="max_depth">Max Depth (optional):</label>
+                    <input type="number" name="max_depth" min="1" max="50" placeholder="Leave empty for unlimited">
+                </div>
+                
+                <div class="form-group">
+                    <label for="test_size">Test Size:</label>
+                    <input type="number" name="test_size" value="0.2" min="0.1" max="0.5" step="0.05" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="random_state">Random State:</label>
+                    <input type="number" name="random_state" value="42" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">🚀 Run Random Forest Analysis</button>
+        </form>
+    </div>
+</body>
+</html>

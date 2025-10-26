@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results - Professional Data Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .results-content {
+            padding: 40px;
+        }
+        
+        .result-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .result-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .feature-importance {
+            margin-top: 20px;
+        }
+        
+        .feature-bar {
+            margin-bottom: 15px;
+        }
+        
+        .feature-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .bar-container {
+            background: #ecf0f1;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            border-radius: 10px;
+        }
+        
+        .actions {
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid #ecf0f1;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+        
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+        
+        .insight-list {
+            list-style: none;
+        }
+        
+        .insight-list li {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-chart-line"></i> Analysis Results</h1>
+            <p>{{ analysis_name }} - {{ filename }}</p>
+            <p>{{ data_shape }} - Generated on {{ results.timestamp if results.timestamp else "Current session" }}</p>
+        </header>
+        
+        <div class="results-content">
+            {% if analysis_type == 'descriptive' or analysis_type == 'comprehensive' %}
+            <div class="result-section">
+                <h3><i class="fas fa-chart-bar"></i> Descriptive Statistics</h3>
+                {% if results.descriptive %}
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value">{{ results.descriptive.basic_info.shape[0] }}</div>
+                            <div class="metric-label">Total Rows</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">{{ results.descriptive.basic_info.shape[1] }}</div>
+                            <div class="metric-label">Total Columns</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">{{ results.descriptive.basic_info.memory_usage }}</div>
+                            <div class="metric-label">Memory Usage</div>
+                        </div>
+                    </div>
+                    
+                    {% if results.descriptive.missing_values %}
+                    <h4>Data Quality</h4>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-value">{{ results.descriptive.missing_values.total_missing }}</div>
+                            <div class="metric-label">Missing Values</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">{{ results.descriptive.missing_values.completeness_percentage }}</div>
+                            <div class="metric-label">Data Completeness</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            {% if analysis_type in ['ml_classification', 'ml_regression', 'comprehensive'] and results.ml_analysis %}
+            <div class="result-section">
+                <h3><i class="fas fa-brain"></i> Machine Learning Results</h3>
+                {% if results.ml_analysis.metrics %}
+                    <div class="metrics-grid">
+                        {% if analysis_type == 'ml_classification' or (analysis_type == 'comprehensive' and results.ml_analysis.metrics.accuracy) %}
+                        <div class="metric-card">
+                            <div class="metric-value">{{ results.ml_analysis.metrics.accuracy }}%</div>
+                            <div class="metric-label">Accuracy</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">{{ results.ml_analysis.metrics.cross_val_accuracy }}%</div>
+                            <div class="metric-label">Cross-Validation Accuracy</div>
+                        </div>
+                        {% else %}
+                        <div class="metric-card">
+                            <div class="metric-value">{{ results.ml_analysis.metrics.r2_score }}</div>
+                            <div class="metric-label">R² Score</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">{{ results.ml_analysis.metrics.mse }}</div>
+                            <div class="metric-label">Mean Squared Error</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if results.ml_analysis.feature_importance %}
+                    <div class="feature-importance">
+                        <h4>Top Feature Importance</h4>
+                        {% for feature, importance in results.ml_analysis.feature_importance %}
+                        <div class="feature-bar">
+                            <div class="feature-name">
+                                <span>{{ feature }}</span>
+                                <span>{{ "%.1f"|format(importance * 100) }}%</span>
+                            </div>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: {{ importance * 100 }}%"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            {% if analysis_type in ['clustering', 'comprehensive'] and results.clustering %}
+            <div class="result-section">
+                <h3><i class="fas fa-object-group"></i> Clustering Results</h3>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">{{ results.clustering.n_clusters }}</div>
+                        <div class="metric-label">Number of Clusters</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">{{ results.clustering.silhouette_score }}</div>
+                        <div class="metric-label">Silhouette Score</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">{{ results.clustering.variance_explained }}%</div>
+                        <div class="metric-label">Variance Explained</div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if analysis_type in ['comprehensive'] and results.insights %}
+            <div class="result-section">
+                <h3><i class="fas fa-lightbulb"></i> Automated Insights</h3>
+                <ul class="insight-list">
+                    {% for insight in results.insights %}
+                    <li>{{ insight }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            <!-- Raw Results Display -->
+            <div class="result-section">
+                <h3><i class="fas fa-code"></i> Raw Analysis Results</h3>
+                <pre>{{ results | tojson(indent=2) }}</pre>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <a href="/analysis_options" class="btn">
+                <i class="fas fa-arrow-left"></i> Back to Analysis Options
+            </a>
+            <a href="/download_report" class="btn btn-success">
+                <i class="fas fa-download"></i> Download Full Report
+            </a>
+            <a href="/upload" class="btn">
+                <i class="fas fa-upload"></i> Upload New File
+            </a>
+        </div>
+    </div>
+</body>
+</html>
