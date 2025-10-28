@@ -1,6 +1,6 @@
 
 
-## ✨ SparkBot: Your Personal Creative Companion!
+## ✨ VibeBot: Your Personal Creative Companion!
 
 **Welcome to SparkBot**—the AI that's here to banish boring replies forever! Built on the powerful n8n framework and fueled by the Google Gemini Chat Model, SparkBot is designed to be your witty, imaginative, and context-aware chat partner. Think less robot, and more highly-creative digital friend who remembers your past chats and adapts to your mood!
 
