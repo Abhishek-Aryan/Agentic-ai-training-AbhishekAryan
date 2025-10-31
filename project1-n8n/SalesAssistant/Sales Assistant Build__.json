@@ -1,0 +1,856 @@
+{
+  "name": "Sales Assistant Build::",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "70406e63-6459-4cad-85f0-b74c481f48a5",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Please research these sales call attendees\n\nName: {{ $json['Contact Name'] }}\nCompany Name: {{ $json['Company Name'] }}\nEmail: {{ $json['Sample Email ID'] }}\n\n\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "# Overview  \nYou are an AI agent responsible for gathering company data and updating a Google Sheet with structured output.  \n\n## Context  \n- After generating output, you must call the **Update Sheet** tool with six specific fields.  \n- Do not skip this step or simply return JSON. The tool must be called explicitly to trigger the Google Sheet update.  \n\n## Instructions  \n1. Accept and parse the input fields.  \n2. Use the **Tavily** tool to gather and summarize:  \n   - `company_overview`  \n    \n   - `company_updates`  \n3. Use the **Product List** tool to identify:  \n   - `primary_solution`  \n   - `secondary_solution`  \n   - `solution_3`  \n4. Format all results as valid JSON with exactly six fields.  \n5. Immediately call the **Update Sheet** tool using the structure shown below.  \n\n## Tools  \n- **Tavily**: Use to research company background, tech stack, and updates.  \n- **Product List**: Use to find relevant products based on business type and project.  \n- **Update Sheet**: Required to write the six outputs into Google Sheets.  \n\n## Examples  \n### Example Input  \n```json\n{\n  \"Name\": \"Acme Inc.\",\n  \"Website\": \"https://www.acme.com\",\n  \"Business Type\": \"E-commerce\",\n  \"Project\": \"Streamlining logistics with automation\"\n}\n```  \n\n### Example Tavily Summary  \n```json\n{\n  \"company_overview\": \"Acme Inc. is a fast-scaling e-commerce company focused on home goods and lifestyle products.\",\n  \"tech_stack\": \"Shopify, Klaviyo, ShipBob, Gorgias\",\n  \"company_updates\": \"Recently launched a same-day delivery program in select cities and expanded product categories in Q2.\"\n}\n```  \n\n### Example Product List Result  \n```json\n{\n  \"primary_solution\": \"Logistics Automation Suite\",\n  \"secondary_solution\": \"Customer Retention AI\",\n  \"solution_3\": \"Real-Time Order Tracking\"\n}\n```  \n\n### Example Tool Call  \n```json\n{\n  \"tool_call\": {\n    \"tool\": \"Update Sheet\",\n    \"parameters\": {\n      \"company_overview\": \"Acme Inc. is a fast-scaling e-commerce company focused on home goods and lifestyle products.\",\n      \"tech_stack\": \"Shopify, Klaviyo, ShipBob, Gorgias\",\n      \"company_updates\": \"Recently launched a same-day delivery program in select cities and expanded product categories in Q2.\",\n      \"primary_solution\": \"Logistics Automation Suite\",\n      \"solution_2\": \"Customer Retention AI\",\n      \"solution_3\": \"Real-Time Order Tracking\"\n    }\n  }\n}\n```  \n\n## SOP (Standard Operating Procedure)  \n1. Parse and validate input fields.  \n2. Use Tavily to collect:  \n   - company_overview  \n\n   - company_updates  \n3. Use Product List to determine:  \n   - primary_solution  \n   - solution_2  \n   - solution_3  \n4. Combine results into a valid JSON object using exact field names.  \n5. Call the Update Sheet tool using that object.  \n\n## Final Notes  \n- Return only valid JSON — no extra text or descriptions.  \n- Always include all six fields, even if data is limited.  \n- Use of the Update Sheet tool is mandatory to complete the task.  \n---\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        432,
+        0
+      ],
+      "id": "257587df-39d0-4e63-a7ff-74c1f44bbdcb",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Use this tool to search the internet",
+        "method": "POST",
+        "url": "https://api.tavily.com/search",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n    \"api_key\": \"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\",\n    \"query\": \"{searchTerm}\",\n    \"search_depth\": \"basic\",\n    \"include_answer\": true,\n    \"topic\": \"news\",\n    \"include_raw_content\": true,\n    \"max_results\": 3\n}",
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "searchTerm",
+              "description": "The query that needs to be searched on Tavily (e.g., company name and summary).",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        256,
+        384
+      ],
+      "id": "eb66921f-9337-40c5-9d9a-d61dec6fb682",
+      "name": "Tavily"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1hAJChAV5N1XqaXc-70KlC7_tpmZbcQvoI05nNAdbmX0",
+          "mode": "list",
+          "cachedResultName": "Copy of Mock data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hAJChAV5N1XqaXc-70KlC7_tpmZbcQvoI05nNAdbmX0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 180447530,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hAJChAV5N1XqaXc-70KlC7_tpmZbcQvoI05nNAdbmX0/edit#gid=180447530"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        448,
+        416
+      ],
+      "id": "2b00450e-17c1-4399-846d-18e9a0e71709",
+      "name": "Product List",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VbYFRpwLkKWYZsH2",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1hAJChAV5N1XqaXc-70KlC7_tpmZbcQvoI05nNAdbmX0",
+          "mode": "list",
+          "cachedResultName": "Copy of Mock data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hAJChAV5N1XqaXc-70KlC7_tpmZbcQvoI05nNAdbmX0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hAJChAV5N1XqaXc-70KlC7_tpmZbcQvoI05nNAdbmX0/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Sample Email ID": "={{ $json['Sample Email ID'] }}",
+            "Primary Solution": "={{ $json['Primary Solution'] }}",
+            "Solution 3": "={{ $json['Solution 3'] }}",
+            "Secondary Solution": "={{ $json['Secondary Solution'] }}",
+            "Company Updates": "={{ $json['Company Updates'] }}",
+            "Company Overview": "={{ $json['Company Overview'] }}"
+          },
+          "matchingColumns": [
+            "Sample Email ID"
+          ],
+          "schema": [
+            {
+              "id": "Call ID",
+              "displayName": "Call ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Sales Rep",
+              "displayName": "Sales Rep",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Contact Name",
+              "displayName": "Contact Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Duration (min)",
+              "displayName": "Duration (min)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Outcome",
+              "displayName": "Outcome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Deal Value ($)",
+              "displayName": "Deal Value ($)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Primary Solution",
+              "displayName": "Primary Solution",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Secondary Solution",
+              "displayName": "Secondary Solution",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Solution 3",
+              "displayName": "Solution 3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sample Email ID",
+              "displayName": "Sample Email ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email Text (Example)",
+              "displayName": "Email Text (Example)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "SMS (Example)",
+              "displayName": "SMS (Example)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Company Overview",
+              "displayName": "Company Overview",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Updates",
+              "displayName": "Company Updates",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        592,
+        368
+      ],
+      "id": "124afe37-e357-4690-a3f7-37d5cc6a2daf",
+      "name": "Update Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VbYFRpwLkKWYZsH2",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"company_overview\": \"string (max 100 tokens)\",\n  \"company_updates\": \"string (max 150 tokens)\",\n  \"primary_solution\": \"string\",\n  \"secondary_solution\": \"string\",\n  \"solution_3\": \"string\",\n  \"sample_email_id\":\"sring\"\n}\n",
+        "autoFix": "={{ false }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        688,
+        224
+      ],
+      "id": "bc91c95f-9651-46b1-ba8d-3a370d1102eb",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Name: {{ $('Review Calls').item.json['Contact Name'] }}\nEmail: {{ $('Review Calls').item.json['Sample Email ID'] }}\nCompany Name: {{ $('Review Calls').item.json['Company Name'] }}\ncompany_overview: {{ $json.output.company_overview }}\ncompany_updates: {{ $json.output.company_updates }}\nprimary_solution: {{ $json.output.primary_solution }}\nsecondary_solution: {{ $json.output.secondary_solution }}\nsolution_3: {{ $json.output.solution_3 }}\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "# Overview  \nYou are a Sales Writing Assistant AI agent responsible for generating a short, personal, and persuasive email, subject line, and SMS right after a prospect books a call. The format must feel handcrafted and human, while integrating strong personalization and a sharp testimonial to build conviction fast.  \n\n## Context  \n- The prospect should feel like the message was written specifically for them—not templated or generic.  \n- The core structure focuses on one key problem they face, followed by immediate proof that we’ve solved that problem for someone just like them.  \n- Messaging must be short, clean, confident, and natural—written like a thoughtful sales rep, not a marketer.  \n- SMS should be simple, friendly, and casual.  \n- Final output must also be logged in a Google Sheet.  \n\n## Instructions  \n1. Analyze the input fields to identify:  \n   - Prospect’s first name, company, business type, and project  \n   - Their specific pain point or goal  \n   - Tech stack or approach they’re using to solve it  \n2. Use the Testimonials Tool to find a success story with a company similar in size, industry, or problem. Pull:  \n   - Company name  \n   - Business type  \n   - Specific result  \n   - Outcome  \n   - Solution used  \n3. Draft a subject line like:  \n   - “Excited to connect, (first name)”  \n4. Write the email using the following exact structure and voice:  \n   ```\n   Subject: Excited to connect, (first name)\n\n   Hey (first name),\n\n   Saw your booking—excited to dive in on (meeting date).\n\n   Automating (problem/project) is right in our wheelhouse. We actually just helped (testimonial first name) who owns (testimonial business name/type) [achieve similar outcome] and (outcome)—just by (solution).\n\n   Looking forward to showing you what’s possible.\n\n   – Nolan\n   ```\n5. Draft the SMS message using this format:  \n   - “Hey (first name)! Nolan from Agent Stack here—just saw your appointment come through. Pumped to hear more about (project details). See you on (meeting day/date)!”  \n6. Output must include:  \n   - Subject  \n   - Email  \n   - Text Message  \n\n## Tools  \n- Testimonials Tool: For pulling relevant proof points  \n- Email Agent: For formatting and polishing  \n- Update Sheets 2: To store outputs  \n\n## Examples  \n- **Output Subject:**  \n  Excited to connect, Jason  \n\n- **Output Email:**  \n  Hey Jason,  \n\n  Saw your booking—excited to dive in on Thursday.  \n\n  Automating custom proposal workflows is right in our wheelhouse. We actually just helped Vibe Studios who runs a creative agency cut 12+ hrs/week of manual drafting and boost proposal output by 4x—just by automating creative packaging from content requests.  \n\n  Looking forward to showing you what’s possible.  \n\n  – Nolan  \n\n- **Output Text Message:**  \n  Hey Jason! Nolan from Agent Stack here—just saw your appointment come through. Pumped to hear more about your proposal automation plans. See you on Thursday!  \n\n## SOP (Standard Operating Procedure)  \n1. Parse all inputs and identify:  \n   - Name  \n   - Specific problem or goal  \n   - Relevant testimonial  \n2. Draft:  \n   - Subject line using first name  \n   - Email using the provided structure and tone  \n   - SMS with natural tone  \n3. Output fields:  \n   - Output Subject  \n   - Output Email  \n   - Output Text Message  \n4. Use Update Sheets 2 to store the following:  \n   - Name  \n   - Email  \n   - Company Name  \n   - Subject  \n   - Email Body  \n   - SMS Message  \n\n## Final Notes  \n- Use clean, minimal formatting—no fluff, no pitchy language.  \n- The testimonial is central—tie it directly to the prospect’s challenge.  \n- The tone should sound like a proactive, thoughtful rep who did their homework.  \n---\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        928,
+        0
+      ],
+      "id": "3a679b8c-db82-483d-bc4c-a2b234278c0e",
+      "name": "Sales Writing Assistant"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1hAJChAV5N1XqaXc-70KlC7_tpmZbcQvoI05nNAdbmX0",
+          "mode": "list",
+          "cachedResultName": "Copy of Mock data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hAJChAV5N1XqaXc-70KlC7_tpmZbcQvoI05nNAdbmX0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hAJChAV5N1XqaXc-70KlC7_tpmZbcQvoI05nNAdbmX0/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Company Overview",
+              "lookupValue": "FILL"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "15798ef3-7dc7-4540-957b-f2c71b3ebb59",
+      "name": "Review Calls",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VbYFRpwLkKWYZsH2",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1hAJChAV5N1XqaXc-70KlC7_tpmZbcQvoI05nNAdbmX0",
+          "mode": "list",
+          "cachedResultName": "Copy of Mock data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hAJChAV5N1XqaXc-70KlC7_tpmZbcQvoI05nNAdbmX0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1084683238,
+          "mode": "list",
+          "cachedResultName": "Sheet3",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hAJChAV5N1XqaXc-70KlC7_tpmZbcQvoI05nNAdbmX0/edit#gid=1084683238"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        1008,
+        384
+      ],
+      "id": "6cae8936-1bc7-44e5-b55d-c0c413a49099",
+      "name": "Testimonials Tool",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VbYFRpwLkKWYZsH2",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"subject\": {\n      \"type\": \"string\",\n      \"description\": \"The subject line of the confirmation email\"\n    },\n    \"email\": {\n      \"type\": \"string\",\n      \"description\": \"The full content of the confirmation email\"\n    },\n    \"text_message\": {\n      \"type\": \"string\",\n      \"description\": \"The full content of the confirmation SMS message\"\n    }\n  },\n  \"required\": [\"subject\", \"email\", \"text_message\"]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1232,
+        208
+      ],
+      "id": "7be413e5-7782-430e-8941-f9aa80feba90",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1hAJChAV5N1XqaXc-70KlC7_tpmZbcQvoI05nNAdbmX0",
+          "mode": "list",
+          "cachedResultName": "Copy of Mock data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hAJChAV5N1XqaXc-70KlC7_tpmZbcQvoI05nNAdbmX0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1hAJChAV5N1XqaXc-70KlC7_tpmZbcQvoI05nNAdbmX0/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Sample Email ID": "={{ $('Review Calls').item.json['Sample Email ID'] }}",
+            "Email Subject": "={{ $('Review Calls').item.json['Email Subject'] }}",
+            "Email Text (Example)": "={{ $('Review Calls').item.json['Email Text (Example)'] }}",
+            "SMS (Example)": "={{ $('Review Calls').item.json['SMS (Example)'] }}",
+            "Company Overview": "={{ $('Review Calls').item.json['Company Overview'] }}",
+            "Company Updates": "={{ $('Review Calls').item.json['Company Updates'] }}"
+          },
+          "matchingColumns": [
+            "Sample Email ID"
+          ],
+          "schema": [
+            {
+              "id": "Call ID",
+              "displayName": "Call ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Sales Rep",
+              "displayName": "Sales Rep",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Contact Name",
+              "displayName": "Contact Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Duration (min)",
+              "displayName": "Duration (min)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Outcome",
+              "displayName": "Outcome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Deal Value ($)",
+              "displayName": "Deal Value ($)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Primary Solution",
+              "displayName": "Primary Solution",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Secondary Solution",
+              "displayName": "Secondary Solution",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Solution 3",
+              "displayName": "Solution 3",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Sample Email ID",
+              "displayName": "Sample Email ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email Text (Example)",
+              "displayName": "Email Text (Example)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "SMS (Example)",
+              "displayName": "SMS (Example)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Overview",
+              "displayName": "Company Overview",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Updates",
+              "displayName": "Company Updates",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        1152,
+        352
+      ],
+      "id": "7014893d-6151-46e6-942f-66cf47028463",
+      "name": "Update Sheets 2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VbYFRpwLkKWYZsH2",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-001",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        96,
+        304
+      ],
+      "id": "2a50f4cd-6e9c-4ed2-aa88-e599fc570cd4",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "oGcXToWk4HjeT8me",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        864,
+        256
+      ],
+      "id": "0b825282-42dd-4952-a46d-d55f26ded4d4",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "oGcXToWk4HjeT8me",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Review Calls",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tavily": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Product List": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Sheet": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Sales Writing Assistant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Review Calls": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Testimonials Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Sales Writing Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Sales Writing Assistant",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Sheets 2": {
+      "ai_tool": [
+        [
+          {
+            "node": "Sales Writing Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Sales Writing Assistant",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b355be0b-7474-405c-bceb-a014ab1f693a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "08828b08200503fa4ae27c593182649d14349579c63a7d40d8728476176cb83c"
+  },
+  "id": "zMtxySQ1fdxI5EQo",
+  "tags": []
+}
