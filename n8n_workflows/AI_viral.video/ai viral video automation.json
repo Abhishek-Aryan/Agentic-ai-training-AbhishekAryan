@@ -1,0 +1,2000 @@
+{
+  "name": "ai viral video automation",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.creatomate.com/v1/renders",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 101f07f714114788ab21b6ae568f11f7973480c86737387586f2531a041d696d2962e51a1033f0800c831d3cc90a4900"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"template_id\": \"21278f53-f1a6-4305-b72b-491f71bbf83c\",\n  \"modifications\": {\n    \"Music.source\": \"https://drive.google.com/file/d/1wnE7sH3xOV17uytRP1FwN67jlfZuvg2P/view?usp=drive_link\",\n    \"Top-Image-1.source\": \"{{ $json['1.2'] }}\",\n    \"Bottom-Image-1.source\": \"{{ $json['1.1'] }}\",\n    \"Middle-Text-1.text\": \"VS\",\n    \"Full-Background-Image-1.source\": \"{{ $json['1.2'] }}\",\n    \"Top-Image-2.source\": \"{{ $json['2.2'] }}\",\n    \"Bottom-Image-2.source\": \"{{ $json['2.1'] }}\",\n    \"Middle-Text-2.text\": \"VS\",\n    \"Full-Background-Image-2.source\": \"{{ $json['2.2'] }}\",\n    \"Top-Image-3.source\": \"{{ $json['3.2'] }}\",\n    \"Bottom-Image-3.source\": \"{{ $json['3.1'] }}\",\n    \"Middle-Text-3.text\": \"VS\",\n    \"Full-Background-Image-3.source\": \"{{ $json['3.2'] }}\",\n    \"Top-Image-4.source\": \"{{ $json['4.2'] }}\",\n    \"Bottom-Image-4.source\": \"{{ $json['4.1'] }}\",\n    \"Middle-Text-4.text\": \"VS\",\n    \"Full-Background-Image-4.source\": \"{{ $json['4.2'] }}\",\n    \"Top-Image-5.source\": \"{{ $json['5.2'] }}\",\n    \"Bottom-Image-5.source\": \"{{ $json['5.1'] }}\",\n    \"Middle-Text-5.text\": \"VS\",\n    \"Full-Background-Image-5.source\": \"{{ $json['5.2'] }}\",\n    \"Top-Image-6.source\": \"{{ $json['6.2'] }}\",\n    \"Bottom-Image-6.source\": \"{{ $json['6.1'] }}\",\n    \"Middle-Text-6.text\": \"VS\",\n    \"Full-Background-Image-6.source\": \"{{ $json['6.2'] }}\",\n    \"Top-Image-7.source\": \"{{ $json['7.2'] }}\",\n    \"Bottom-Image-7.source\": \"{{ $json['7.1'] }}\",\n    \"Middle-Text-7.text\": \"VS\",\n    \"Full-Background-Image-7.source\": \"{{ $json['7.2'] }}\",\n    \"Top-Image-8.source\": \"{{ $json['8.2'] }}\",\n    \"Bottom-Image-8.source\": \"{{ $json['8.1'] }}\",\n    \"Middle-Text-8.text\": \"VS\",\n    \"Full-Background-Image-8.source\": \"{{ $json['8.2'] }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        928,
+        1248
+      ],
+      "id": "91043b59-b330-48df-9ffa-1ac96cd07c3f",
+      "name": "Render Video"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1EClmopl_75uiKFr150T7GDFPFkIoCgZij6eR-lJpAbQ",
+          "mode": "list",
+          "cachedResultName": "Sample",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EClmopl_75uiKFr150T7GDFPFkIoCgZij6eR-lJpAbQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EClmopl_75uiKFr150T7GDFPFkIoCgZij6eR-lJpAbQ/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "To Do"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        768,
+        144
+      ],
+      "id": "352e19d5-f840-4b0e-aa88-6e9a815cd1fc",
+      "name": "Get Main Character",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VbYFRpwLkKWYZsH2",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Main Character:{{ $json['Main Character '] }}\nOpponents:{{ $json.Oppnents }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=# Overview\nYou are an AI agent that creates fight scene matchups.\n\n## Instructions\nGiven a main character and a category of opponents, generate a list of eight different opponents from that category. Each opponent should be suitable to fight the main character and come from a different environment, background, or type within the category.\n\nDo not include descriptions, adjectives, or extra context. Only list the opponent names with their enivronment, one per scene, labeled clearly.\n\n## Output Format:\nOnly output the opponent.\n\nScene 1: [Opponent]\nScene 2: [Opponent]\nScene 3: [Opponent]\nScene 4: [Opponent]\nScene 5: [Opponent]\nScene 6: [Opponent]\nScene 7: [Opponent]\nScene 8: [Opponent]\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        928,
+        144
+      ],
+      "id": "07f9169f-f10e-4052-bf06-bbb20207f084",
+      "name": "Scene Creator"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Main Animal: {{ $json.mainCharacter }}\nOpponent: {{ $json.opponents }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=# System Prompt\n\nYou are an AI agent that generates high-quality text-to-image prompts for a photorealistic image generation API.\n\n## Task\nGiven a **main animal** and an **opponent**, generate two separate close-up image prompts optimized for cinematic AI-generated images.\n\n## Output\nOutput two close up prompts. One for the main animal, one for the opponent.\n\nEach prompt must make the animal look:\n- hyper-realistic and photorealistic\n- fierce, angry, intimidating, threatening\n- Focused on high detail: skin/fur/scales, lighting, facial expression, and textures\n- Roaring with mouth wide open\n- Designed to make the animal look powerful, aggressive, and dramatic\n- The animal should be looking into the camera\n\nDo not include any background story, camera specifications, or extra formatting. Only return two clear and vivid text-to-image prompts—one for each animal.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        608,
+        592
+      ],
+      "id": "51f4dcef-e0b1-4615-8aca-ecb9bf2d23f3",
+      "name": "Image Prompt Generator"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "opponents",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        240
+      ],
+      "id": "0278afac-9268-473c-bc78-4cb09472137b",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ca3dc849-efdb-4c9c-9f6a-bff50a66cec6",
+              "name": "mainCharacter",
+              "value": "={{ $('Get Main Character').item.json['Main Character '] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1344,
+        64
+      ],
+      "id": "698eb88b-d64f-46d5-9926-eb46a4d37b04",
+      "name": "Main Character"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        1584,
+        144
+      ],
+      "id": "8f44ffa0-de04-463f-a5e4-5c6c09da0658",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ee009a73-f9e0-48b2-963e-6d88f7b01fce",
+              "name": "opponents",
+              "value": "=['{{ $json.output.scene1 }}','{{ $json.output.scene2 }}','{{ $json.output.scene3 }}','{{ $json.output.scene4 }}','{{ $json.output.scene5 }}','{{ $json.output.scene6 }}','{{ $json.output.scene7 }}','{{ $json.output.scene8 }}']",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1264,
+        240
+      ],
+      "id": "3d8401ee-2a2f-46a1-b725-04b31a30a16c",
+      "name": "Opponents"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"scene1\": \"Tiger\",\n  \"scene2\": \"Gorilla\",\n  \"scene3\": \"Black Panther\",\n  \"scene4\": \"Buffalo\",\n  \"scene5\": \"Anaconda\",\n  \"scene6\": \"Hyena\",\n  \"scene7\": \"Leopard\",\n  \"scene8\": \"Crocodile\"\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1968,
+        160
+      ],
+      "id": "f8601f76-07c6-4435-a7e1-72663b40f19c",
+      "name": "Scenes"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"mainCharacterCloseUp\": \"imagePrompt1\",\n  \"opponentCloseUp\": \"imagePrompt2\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1888,
+        528
+      ],
+      "id": "14fd2642-bd32-4b75-bb47-ba65a2d2fef2",
+      "name": "Close Ups"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Animal 1: {{ $('Merge').item.json.mainCharacter }}\nAnimal 2: {{ $('Merge').item.json.opponents }}",
+        "options": {
+          "systemMessage": "=# Overview\nYou are an AI agent that creates text-to-image prompts for a photorealistic image generation API. Your goal is to create a single cinematic scene that shows the aftermath of a battle between two aniamals.\n\n## Task:\nGiven two animals, write one vivid prompt for a photorealistic image that shows the aftermath of a fight. Decide which animal is the winner, it should be realistic based on the strengths of each animal.\n\n## Prompt Guidelines\n1. The winner must be standing on top of the loser in a dominating stance. They should have visible battle scars.\n2. The winner should staring at the camera, roaring, mouth wide open, looking fierce, intimidating, and terrifying.\n3. The loser must appear dead, the word \"lifeless\" should be used. The loser should have visible wounds and battle scars.\n5. Both animal must be clearly visible, with the winner’s dominant stance making it immediately obvious who won the fight.\n6. The image must be photorealistic, with high attention to lighting, textures, and atmosphere. It should clearly display the aftermath of a brutal fight where the loser was injured.\n7. The two animals must be the main focus, filling most of the frame. The background should only enhance the realism and not distract.\n8. Each animal must be visually distinct and easily identifiable based on real-world appearance. The prompt must clearly describe each animal by name and include key traits that help the model render them correctly and differently.\n9. Use species-specific language to avoid confusion. Do not refer to both animals as just “beasts” or “creatures.” Always name them: \"the lion\" and \"the wolf\" — and refer back to them by name in the prompt.\n\n## Output:\nReturn one single paragraph as the final prompt.\n\n## Good Example Image Prompts\n1) In a photorealistic, cinematic scene, a massive polar bear stands triumphantly over the lifeless body of a jaguar in a snow-dusted landscape. The polar bear, its thick white fur spattered with streaks of blood and dust, dominates the frame, towering above the slack, motionless form of the jaguar sprawled beneath its heavy paw. The polar bear’s mouth is wide open in a terrifying roar, sharp teeth glistening, and its dark, fierce eyes stare straight into the camera, exuding raw power and victory. The jaguar’s spotted golden body lies limp and completely still, head tilted to the side, eyes fully closed with no sign of life, jaws parted loosely, and its muscular limbs splayed carelessly on the icy ground. Every detail—from the jaguar’s distinctive rosettes to the polar bear’s thick, textured fur and massive claws—is rendered in sharp, lifelike clarity beneath cold, dramatic lighting, making it unmistakably clear that the polar bear is the fearsome victor of this brutal encounter.\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        672,
+        928
+      ],
+      "id": "14bf18e4-400f-4a9d-ad12-97e3352c3f13",
+      "name": "Winner Image Prompt"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1248,
+        1248
+      ],
+      "id": "8a03d314-2721-4a29-aced-b4f0afb6163d",
+      "name": "Get Video"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.piapi.ai/api/v1/task",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 08dbad13534fc86f7a37dd068ed3b3dcfaf53a67cc0d908755cc400cefe143dd"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"model\": \"Qubico/flux1-dev\",\n    \"task_type\": \"txt2img\",\n    \"input\": {\n        \"prompt\": \"{{ $json.output }}\",\n        \"width\": 1024, \n        \"height\": 1024\n    } \n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        592
+      ],
+      "id": "fa768d27-adee-416e-8462-acc40058afa5",
+      "name": "Generate Close Ups",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "01G6QUv7k3AllCB4",
+          "name": "Header Auth account 11"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        912,
+        592
+      ],
+      "id": "aaa00bb9-6ac4-4fa6-86e3-37ad13f518ec",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "amount": 90
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1184,
+        592
+      ],
+      "id": "312bb133-68ef-455c-a2a6-2e996a944bc0",
+      "name": "90 seconds",
+      "webhookId": "4d2189e7-aecc-4812-8e55-5f9509b159fc"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.piapi.ai/api/v1/task/{{ $json.data.task_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 08dbad13534fc86f7a37dd068ed3b3dcfaf53a67cc0d908755cc400cefe143dd"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1328,
+        592
+      ],
+      "id": "4b39a236-231b-48bb-a50c-daa97adbff85",
+      "name": "Get Close Ups",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "01G6QUv7k3AllCB4",
+          "name": "Header Auth account 11"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1EClmopl_75uiKFr150T7GDFPFkIoCgZij6eR-lJpAbQ",
+          "mode": "list",
+          "cachedResultName": "Sample",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EClmopl_75uiKFr150T7GDFPFkIoCgZij6eR-lJpAbQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EClmopl_75uiKFr150T7GDFPFkIoCgZij6eR-lJpAbQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Main Character ": "={{ $('Get Main Character').item.json['Main Character '] }}",
+            "Oppnents": "={{ $('Get Main Character').item.json.Oppnents }}",
+            "Status": "={{ $('Get Main Character').item.json.Status }}",
+            "Final image": "={{ $('Get Main Character').item.json['Final image'] }}",
+            "1.1": "={{ $('Get Main Character').item.json['1.1'] }}",
+            "1.2": "={{ $('Get Main Character').item.json['1.2'] }}",
+            "2.1": "={{ $('Get Main Character').item.json['2.1'] }}",
+            "2.2": "={{ $('Get Main Character').item.json['2.2'] }}",
+            "3.1": "={{ $('Get Main Character').item.json['3.1'] }}",
+            "3.2": "={{ $('Get Main Character').item.json['3.2'] }}",
+            "4.1": "={{ $('Get Main Character').item.json['4.1'] }}",
+            "4.2": "={{ $('Get Main Character').item.json['4.2'] }}",
+            "5.1": "={{ $('Get Main Character').item.json['5.1'] }}",
+            "5.2": "={{ $('Get Main Character').item.json['5.2'] }}",
+            "6.1": "={{ $('Get Main Character').item.json['6.1'] }}",
+            "6.2": "={{ $('Get Main Character').item.json['6.2'] }}",
+            "7.1": "={{ $('Get Main Character').item.json['7.1'] }}",
+            "7.2": "={{ $('Get Main Character').item.json['7.2'] }}",
+            "8.1": "={{ $('Get Main Character').item.json['8.1'] }}",
+            "8.2": "={{ $('Get Main Character').item.json['8.2'] }}"
+          },
+          "matchingColumns": [
+            "Main Character "
+          ],
+          "schema": [
+            {
+              "id": "Main Character ",
+              "displayName": "Main Character ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Oppnents",
+              "displayName": "Oppnents",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Final image",
+              "displayName": "Final image",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "1.1",
+              "displayName": "1.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "1.2",
+              "displayName": "1.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "2.1",
+              "displayName": "2.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "2.2",
+              "displayName": "2.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "3.1",
+              "displayName": "3.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "3.2",
+              "displayName": "3.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "4.1",
+              "displayName": "4.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "4.2",
+              "displayName": "4.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "5.1",
+              "displayName": "5.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "5.2",
+              "displayName": "5.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "6.1",
+              "displayName": "6.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "6.2",
+              "displayName": "6.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "7.1",
+              "displayName": "7.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "7.2",
+              "displayName": "7.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "8.1",
+              "displayName": "8.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "8.2",
+              "displayName": "8.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1600,
+        592
+      ],
+      "id": "b27ca353-49f4-4205-9150-9a98d00f0ac6",
+      "name": "Add Close Ups",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VbYFRpwLkKWYZsH2",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1472,
+        592
+      ],
+      "id": "d4578a1f-0f90-4dde-a6aa-eabbb133cf09",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.piapi.ai/api/v1/task",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 394ae155ac687cf8b79da6972d4ba89136d8f45fbb170880a4123f3190702080"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"model\": \"Qubico/flux1-dev\",\n    \"task_type\": \"txt2img\",\n    \"input\": {\n        \"prompt\": \"{{ $json.output }}\",\n        \"width\": 540, \n        \"height\": 960\n    } \n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        928
+      ],
+      "id": "01b42736-2f55-47fc-87cb-9b22100e5b04",
+      "name": "Generate Scene",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "HEttz0c7JbUzv7ZL",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.piapi.ai/api/v1/task/{{ $json.data.task_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 394ae155ac687cf8b79da6972d4ba89136d8f45fbb170880a4123f3190702080"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1248,
+        928
+      ],
+      "id": "5b06a11a-f7c7-405c-9238-c32a970d9e77",
+      "name": "Get Winners",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "J6QI8aStlZUzwxJ8",
+          "name": "Header Auth account 9"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 90
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1104,
+        928
+      ],
+      "id": "a682e2d3-5109-4f7c-b2d7-c60709c63d4d",
+      "name": "90_seconds",
+      "webhookId": "4d2189e7-aecc-4812-8e55-5f9509b159fc"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        928
+      ],
+      "id": "0348fb54-187b-4db3-9b38-b197090829fe",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1EClmopl_75uiKFr150T7GDFPFkIoCgZij6eR-lJpAbQ",
+          "mode": "list",
+          "cachedResultName": "Sample",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EClmopl_75uiKFr150T7GDFPFkIoCgZij6eR-lJpAbQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EClmopl_75uiKFr150T7GDFPFkIoCgZij6eR-lJpAbQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Main Character ": "={{ $('Get Main Character').item.json['Main Character '] }}",
+            "Status": "={{ $('Get Main Character').item.json.Status }}",
+            "Oppnents": "={{ $('Get Main Character').item.json.Oppnents }}",
+            "Final image": "={{ $('Get Main Character').item.json['Final image'] }}",
+            "1.2": "={{ $('Get Main Character').item.json['1.2'] }}",
+            "2.2": "={{ $('Get Main Character').item.json['2.2'] }}",
+            "3.2": "={{ $('Get Main Character').item.json['3.2'] }}",
+            "4.2": "={{ $('Get Main Character').item.json['4.2'] }}",
+            "5.2": "={{ $('Get Main Character').item.json['5.2'] }}",
+            "6.2": "={{ $('Get Main Character').item.json['6.2'] }}",
+            "7.2": "={{ $('Get Main Character').item.json['7.2'] }}",
+            "8.2": "={{ $('Get Main Character').item.json['8.2'] }}"
+          },
+          "matchingColumns": [
+            "Main Character "
+          ],
+          "schema": [
+            {
+              "id": "Main Character ",
+              "displayName": "Main Character ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Oppnents",
+              "displayName": "Oppnents",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Final image",
+              "displayName": "Final image",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "1.1",
+              "displayName": "1.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "1.2",
+              "displayName": "1.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "2.1",
+              "displayName": "2.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "2.2",
+              "displayName": "2.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "3.1",
+              "displayName": "3.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "3.2",
+              "displayName": "3.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "4.1",
+              "displayName": "4.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "4.2",
+              "displayName": "4.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "5.1",
+              "displayName": "5.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "5.2",
+              "displayName": "5.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "6.1",
+              "displayName": "6.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "6.2",
+              "displayName": "6.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "7.1",
+              "displayName": "7.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "7.2",
+              "displayName": "7.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "8.1",
+              "displayName": "8.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "8.2",
+              "displayName": "8.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1520,
+        928
+      ],
+      "id": "8afc9466-86ea-4d32-98a8-bfa2e50ca886",
+      "name": "Add Winner",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VbYFRpwLkKWYZsH2",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        608,
+        1248
+      ],
+      "id": "8ac1fd0a-8571-477e-8a8c-e3b81ef49c8f",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1EClmopl_75uiKFr150T7GDFPFkIoCgZij6eR-lJpAbQ",
+          "mode": "list",
+          "cachedResultName": "Sample",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EClmopl_75uiKFr150T7GDFPFkIoCgZij6eR-lJpAbQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ag61Kxk1kqmTj3Q9s1PQU35cme_CTt8xktKBYth7H0U/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Main Character ",
+              "lookupValue": "={{ $('Get Main Character').item.json['Main Character '] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        768,
+        1248
+      ],
+      "id": "a1e1d14e-fdaf-4a1d-8c38-dfa6f99b13b9",
+      "name": "Get Elements",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VbYFRpwLkKWYZsH2",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1EClmopl_75uiKFr150T7GDFPFkIoCgZij6eR-lJpAbQ",
+          "mode": "list",
+          "cachedResultName": "Sample",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EClmopl_75uiKFr150T7GDFPFkIoCgZij6eR-lJpAbQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EClmopl_75uiKFr150T7GDFPFkIoCgZij6eR-lJpAbQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Main Character ": "={{ $('Get Main Character').item.json['Main Character '] }}",
+            "Oppnents": "={{ $('Get Main Character').item.json.Oppnents }}",
+            "Status": "={{ $('Get Main Character').item.json.Status }}",
+            "Final image": "={{ $('Get Main Character').item.json['Final image'] }}",
+            "1.1": "={{ $('Get Main Character').item.json['1.1'] }}",
+            "1.2": "={{ $('Get Main Character').item.json['1.2'] }}",
+            "2.1": "={{ $('Get Main Character').item.json['2.1'] }}",
+            "2.2": "={{ $('Get Main Character').item.json['2.2'] }}",
+            "3.1": "={{ $('Get Main Character').item.json['3.1'] }}",
+            "3.2": "={{ $('Get Main Character').item.json['3.2'] }}",
+            "4.1": "={{ $('Get Main Character').item.json['4.1'] }}",
+            "4.2": "={{ $('Get Main Character').item.json['4.2'] }}",
+            "5.1": "={{ $('Get Main Character').item.json['5.1'] }}",
+            "5.2": "={{ $('Get Main Character').item.json['5.2'] }}",
+            "6.1": "={{ $('Get Main Character').item.json['6.1'] }}",
+            "6.2": "={{ $('Get Main Character').item.json['6.2'] }}",
+            "7.1": "={{ $('Get Main Character').item.json['7.1'] }}",
+            "7.2": "={{ $('Get Main Character').item.json['7.2'] }}",
+            "8.1": "={{ $('Get Main Character').item.json['8.1'] }}",
+            "8.2": "={{ $('Get Main Character').item.json['8.2'] }}"
+          },
+          "matchingColumns": [
+            "Main Character "
+          ],
+          "schema": [
+            {
+              "id": "Main Character ",
+              "displayName": "Main Character ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Oppnents",
+              "displayName": "Oppnents",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Final image",
+              "displayName": "Final image",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "1.1",
+              "displayName": "1.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "1.2",
+              "displayName": "1.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "2.1",
+              "displayName": "2.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "2.2",
+              "displayName": "2.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "3.1",
+              "displayName": "3.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "3.2",
+              "displayName": "3.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "4.1",
+              "displayName": "4.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "4.2",
+              "displayName": "4.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "5.1",
+              "displayName": "5.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "5.2",
+              "displayName": "5.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "6.1",
+              "displayName": "6.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "6.2",
+              "displayName": "6.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "7.1",
+              "displayName": "7.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "7.2",
+              "displayName": "7.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "8.1",
+              "displayName": "8.1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "8.2",
+              "displayName": "8.2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1408,
+        1248
+      ],
+      "id": "f9bd4a68-9ecd-4106-93ff-3d8ed040dac5",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "VbYFRpwLkKWYZsH2",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 90
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1088,
+        1248
+      ],
+      "id": "652b6aa2-8eb2-4346-8331-795d6a59dec8",
+      "name": "90_Seconds",
+      "webhookId": "32dfbb57-d930-4807-922e-78fa7fb72e78"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/media",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "url",
+              "value": "={{ $json['Final image'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1568,
+        1248
+      ],
+      "id": "842075cd-048e-4c1b-b5cc-08ccdefc0cf5",
+      "name": "Upload to Blotato",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "J6QI8aStlZUzwxJ8",
+          "name": "Header Auth account 9"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"post\": {\n    \"target\": {\n      \"targetType\": \"instagram\"\n    },\n    \"content\": {\n      \"text\": \"{{ $('Get Main Character').item.json['Main Character'] }} vs {{ $('Get Main Character').item.json.Opponents }}\",\n      \"platform\": \"instagram\",\n      \"mediaUrls\": [\"{{ $json.url }}\"]\n    },\n    \"accountId\": \"account_id\"\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1920,
+        768
+      ],
+      "id": "4e680d96-d9eb-4f99-8c32-5a885b02b2cc",
+      "name": "Instagram"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"post\": {\n    \"target\": {\n      \"targetType\": \"tiktok\",\n      \"isYourBrand\": false,\n      \"disabledDuet\": false,\n      \"privacyLevel\": \"PUBLIC_TO_EVERYONE\",\n      \"isAiGenerated\": true,\n      \"disabledStitch\": false,\n      \"disabledComments\": false,\n      \"isBrandedContent\": false\n    },\n    \"content\": {\n      \"text\": \"{{ $('Get Main Character').item.json['Main Character'] }} vs {{ $('Get Main Character').item.json.Opponents }}\",\n      \"platform\": \"tiktok\",\n      \"mediaUrls\": [\"{{ $json.url }}\"]\n    },\n    \"accountId\": \"account_id\"\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1920,
+        1024
+      ],
+      "id": "4223be91-2d83-453a-b9f3-ca6df218f54e",
+      "name": "TikTok"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"post\": {\n    \"target\": {\n      \"targetType\": \"youtube\",\n      \"title\": \"{{ $('Get Main Character').item.json['Main Character'] }} vs {{ $('Get Main Character').item.json.Opponents }}\",\n      \"privacyStatus\": \"unlisted\",\n      \"shouldNotifySubscribers\": false\n    },\n    \"content\": {\n      \"text\": \"text\",\n      \"platform\": \"youtube\",\n      \"mediaUrls\": [\"{{ $json.url }}\"]\n    },\n    \"accountId\": \"account_id\"\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1920,
+        1280
+      ],
+      "id": "7d208dab-6e2a-4293-8dd2-09346a3d20ea",
+      "name": "YouTube"
+    },
+    {
+      "parameters": {
+        "content": "# Create Scenes\n\n",
+        "height": 440,
+        "width": 1320,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        480,
+        0
+      ],
+      "id": "5001f4f6-1770-4847-b623-dac439024cac",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# Create Close-up Images",
+        "height": 320,
+        "width": 1320,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        480,
+        464
+      ],
+      "id": "bceaf57b-5fe2-4c97-928b-9662f1358975",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# Create Winner Images",
+        "height": 320,
+        "width": 1320,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        480,
+        800
+      ],
+      "id": "5e039b6f-e83f-41fb-85ed-e44bd77ee9ae",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# Output Parser & Chat Models\n",
+        "height": 660,
+        "width": 300,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1824,
+        0
+      ],
+      "id": "390adb81-3f12-48c1-92c5-bf41a32a12fd",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "# Render Video",
+        "height": 300,
+        "width": 1320,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        480,
+        1152
+      ],
+      "id": "5f9ea93b-9d58-4c78-a112-3df093835135",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "# Instagram",
+        "height": 240,
+        "width": 300
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1824,
+        688
+      ],
+      "id": "7cdf4918-4d46-4651-9714-a5c92dea842b",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "# TikTok",
+        "height": 240,
+        "width": 300
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1824,
+        944
+      ],
+      "id": "29cb1abc-98fc-4d8d-bf43-d225aec2cebc",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "# YouTube\n",
+        "height": 240,
+        "width": 300
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1824,
+        1200
+      ],
+      "id": "16125c87-3134-4c3b-a972-86592640081e",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        144
+      ],
+      "id": "ea99ceb6-c514-4cbd-9ef7-802507d28c17",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "content": "# 🛠️Setup Guide  \n\n1. **Make a copy** of this [Google Sheet Template](https://docs.google.com/spreadsheets/d/17bBP-jKvuXOev1jdCr4-eLCqL6uypWUkOGWdVYMF_Po/edit?usp=sharing) and connect it to the five Google Sheet nodes in the workflow.\n\n2. Connect your [OpenRouter](https://openrouter.ai/) API key to the two OpenRouter nodes in the chat model section.\n\n3. Create a [PiAPi](https://piapi.ai/workspace?via=nate) account and connect your API key.\n\n4. Create a [Creatomate](https://creatomate.com/) account and connect your template ID and account ID.  \n   You can duplicate the same template shown in the video by using the source code linked in the same Skool post where you downloaded the workflow.\n\n5. Connect your [Blotato](https://blotato.com/?ref=nate) account and get your API key to enable auto publishing to Instagram, TikTok, and YouTube.\n- promo code \"NATE30\" for 30% off for 6 months",
+        "height": 460,
+        "width": 460
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        160
+      ],
+      "id": "49c67e1b-4ab2-4be6-943e-521f91142b8a",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1904,
+        272
+      ],
+      "id": "1e72f3e0-4f40-40d2-b306-158b02b1403b",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "oGcXToWk4HjeT8me",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        448
+      ],
+      "id": "210c3d8d-0649-4d78-8a5a-91e9d2943911",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "oGcXToWk4HjeT8me",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Render Video": {
+      "main": [
+        [
+          {
+            "node": "90_Seconds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Main Character": {
+      "main": [
+        [
+          {
+            "node": "Scene Creator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scene Creator": {
+      "main": [
+        [
+          {
+            "node": "Opponents",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Main Character",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Prompt Generator": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Main Character": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Image Prompt Generator",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Winner Image Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Opponents": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scenes": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Scene Creator",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Close Ups": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Image Prompt Generator",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Winner Image Prompt": {
+      "main": [
+        [
+          {
+            "node": "Generate Scene",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Generate Close Ups",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Close Ups": {
+      "main": [
+        [
+          {
+            "node": "90 seconds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "90 seconds": {
+      "main": [
+        [
+          {
+            "node": "Get Close Ups",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Close Ups": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Add Close Ups",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Scene": {
+      "main": [
+        [
+          {
+            "node": "90_seconds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "90_seconds": {
+      "main": [
+        [
+          {
+            "node": "Get Winners",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Winners": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "Add Winner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Close Ups": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Winner": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Get Elements",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Elements": {
+      "main": [
+        [
+          {
+            "node": "Render Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Video": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "90_Seconds": {
+      "main": [
+        [
+          {
+            "node": "Get Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Upload to Blotato",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Blotato": {
+      "main": [
+        [
+          {
+            "node": "Instagram",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "TikTok",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "YouTube",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Main Character",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Image Prompt Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Scene Creator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Winner Image Prompt",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "26c09fca-a367-4e66-8b48-4ed280083623",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "08828b08200503fa4ae27c593182649d14349579c63a7d40d8728476176cb83c"
+  },
+  "id": "2LBGtaaPYRiBBtHQ",
+  "tags": []
+}
